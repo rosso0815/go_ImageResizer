@@ -2,7 +2,7 @@ package mygraphics
 
 import (
 	"errors"
-	"gopkg.in/gographics/imagick.v2/imagick"
+	"gopkg.in/gographics/imagick.v3/imagick"
 	"log"
 	"path"
 	"strings"
@@ -35,7 +35,7 @@ func WriteResizedImages(image Image) error {
 		newHeigth := image.heigth * 1000 / scale
 		log.Println("image width > 1980 scale=", scale, " newHheigth=", newHeigth)
 
-		err = image.wand.ResizeImage(1980, newHeigth, imagick.FILTER_LANCZOS, 1)
+		err = image.wand.ResizeImage(uint(1980), newHeigth, imagick.FILTER_LANCZOS)
 		if err != nil {
 			panic(err)
 		}

@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------
 
-export IM_PATH="/usr/local/opt/imagemagick@6"
+export IM_PATH="/usr/local/opt/imagemagick"
 export PATH="${IM_PATH}/bin:$PATH"
 export LDFLAGS="-L${IM_PATH}/lib"
 export CPPFLAGS="-I${IM_PATH}/include"
