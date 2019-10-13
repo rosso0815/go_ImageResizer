@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------
 
-export IM_PATH="/usr/local/opt/imagemagick"
+export IM_PATH="/usr/local/im"
 export PATH="${IM_PATH}/bin:$PATH"
 export LDFLAGS="-L${IM_PATH}/lib"
 export CPPFLAGS="-I${IM_PATH}/include"
@@ -10,7 +10,10 @@ pkg-config --cflags --libs MagickWand
 
 export CGO_CFLAGS_ALLOW='-Xpreprocessor'
 
-go get -u gopkg.in/gographics/imagick.v3/imagick
+go clean --modcache
+go clean -i -r -cache -testcache -modcache
+
+GODEBUG=gocacheverify=1 go get -u gopkg.in/gographics/imagick.v3/imagick
 
 GOFLAGS="-count=1" time go test ./mygraphics/
 
@@ -26,3 +29,4 @@ find . -type f -name 'conv_*' | while read FILE ; do
 done 
 
 
+CPU=1 TIME=15sec

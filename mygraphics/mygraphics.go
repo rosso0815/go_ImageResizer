@@ -21,6 +21,7 @@ type Image struct {
 }
 
 func init() {
+
 	imagick.Initialize()
 	defer imagick.Terminate()
 }

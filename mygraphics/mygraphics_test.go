@@ -21,10 +21,11 @@ func deleteOldFiles() {
 	}
 }
 
+// TestReadmetadata just to verify the actual pictures
 func TestReadmetadata(t *testing.T) {
 	log.Println("@@@ start")
 
-	img1, _ := ReadMetaInfo("test.jpg")
+	img1, _ := ReadMetaInfo("test01.jpg")
 	if img1.width != 5472 {
 		log.Panic("image wrong height")
 	}
@@ -51,13 +52,13 @@ func TestReadmetadata(t *testing.T) {
 func TestResizedImage(t *testing.T) {
 	log.Println("@@@ TestResizedImage")
 
-	os.Remove("conv*.jpg")
-
 	deleteOldFiles()
 
-	img1, _ := ReadMetaInfo("test.jpg")
-
+	img1, _ := ReadMetaInfo("test01.jpg")
 	WriteResizedImages(img1)
+
+	img2, _ := ReadMetaInfo("test02.jpg")
+	WriteResizedImages(img2)
 
 	deleteOldFiles()
 }

@@ -1,14 +1,13 @@
 package main
 
-// see https://github.com/gographics/gmagick
-
 import (
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 
-	"gopkg.in/urfave/cli.v1"
+	"github.com/urfave/cli"
 
 	"github.com/rosso0815/go_ImageResizer/mygraphics"
 )
@@ -44,7 +43,7 @@ func runConvert(paths []string) error {
 		// go worker stuff
 		jobs := make(chan string, 1000)
 		results := make(chan string, 1000)
-		for w := 1; w <= 4; w++ {
+		for w := 1; w <= 8; w++ {
 			go workerConvert(w, jobs, results)
 		}
 
@@ -74,6 +73,9 @@ func runConvert(paths []string) error {
 }
 
 func main() {
+
+	runtime.GOMAXPROCS(8)
+
 	log.Println("@@@ start")
 
 	app := cli.NewApp()
