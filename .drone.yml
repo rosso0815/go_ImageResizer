@@ -1,9 +1,12 @@
 ---
 kind: pipeline
-name: build
+name: build_all
 steps:
-- name: en
-  image: alpine
-  commands:
-  - echo hello andreas pfister from home 12345 again and again and again
-  - echo world of drone works now
+  - name: test
+    image: golang:1.13
+    commands:
+      - echo hello andreas pfister from home 12345 again and again and again
+      - echo world of drone works now
+      - ls -al
+      - uname -a
+      - GOFLAGS="-count=1" go test ./mygraphics/
