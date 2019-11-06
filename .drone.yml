@@ -1,0 +1,9 @@
+---
+kind: pipeline
+name: build
+steps:
+- name: en
+  image: alpine
+  commands:
+  - echo hello andreas pfister from home 12345 again and again and again
+  - echo world of drone works now
