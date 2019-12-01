@@ -30,3 +30,13 @@ done
 
 
 CPU=1 TIME=15sec
+
+# Docker
+
+## Build
+
+```
+# lets build
+docker build .
+
+```
