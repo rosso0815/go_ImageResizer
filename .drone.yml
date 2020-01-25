@@ -2,11 +2,8 @@
 kind: pipeline
 name: build_all
 steps:
-  - name: test
+  - name: build_image
     image: golang:1.13
     commands:
-      - echo hello andreas pfister from home 12345 again and again and again
-      - echo world of drone works now
-      - ls -al
-      - uname -a
-      - GOFLAGS="-count=1" go test ./mygraphics/
+      - echo build the image
+      - docker build .

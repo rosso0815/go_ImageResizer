@@ -1,13 +1,11 @@
 package main
 
 import (
+	"github.com/urfave/cli"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
-	"runtime"
-
-	"github.com/urfave/cli"
 
 	"github.com/rosso0815/go_ImageResizer/mygraphics"
 )
@@ -74,7 +72,7 @@ func runConvert(paths []string) error {
 
 func main() {
 
-	runtime.GOMAXPROCS(8)
+	//runtime.GOMAXPROCS(8)
 
 	log.Println("@@@ start")
 
