@@ -7,11 +7,6 @@ import (
 	"testing"
 )
 
-// func readFromIntercafe(r Reader) {
-// 	log.Println("@@@ readFromIntercafe")
-// 	r.ReadData("path 2")
-
-// }
 func TestInterface(t *testing.T) {
 	log.Println("@@@ TestInterface")
 
@@ -21,7 +16,10 @@ func TestInterface(t *testing.T) {
 
 	i1.ReadFile("test01.jpg")
 
-	//readFromIntercafe(i1)
+	i1 = ImageMagickInternals{}
+
+	i1.ReadFile("test01.jpg")
+
 }
 
 func deleteOldFiles() {

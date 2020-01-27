@@ -23,6 +23,18 @@ type ImageMagickInternals struct {
 	image Image
 }
 
+// Interface01 play
+type Interface01 struct {
+	Path string
+}
+
+// ReadFile for test interface
+func (if01 Interface01) ReadFile(path string) (err error) {
+	log.Println("@@@ if01 ReadData path       = " + path)
+	log.Println("@@@ if01 ReadData local_path = " + if01.Path)
+	return nil
+}
+
 // ReadFile reads the file and analyze it
 func (im ImageMagickInternals) SaveFileResized(filePath string) (img Image, err error) {
 
@@ -74,7 +86,7 @@ func (im ImageMagickInternals) SaveFileResized(filePath string) (img Image, err 
 
 // ReadFile read the info from path
 // wand can be nil
-func (im ImageMagickInternals) ReadFile(myPath string) (Image, error) {
+func (im ImageMagickInternals) ReadFile(myPath string) error {
 
 	log.Println("@@@ ReadMetaInfo path=", myPath)
 	log.Println("path.Ext=", strings.ToLower(path.Ext(myPath)), "xxx")
@@ -83,7 +95,7 @@ func (im ImageMagickInternals) ReadFile(myPath string) (Image, error) {
 
 	// error by not jpg files ...
 	if strings.Compare(myExt, ".jpg") != 0 {
-		return Image{}, errors.New("mygraphics: cannot open not-jpg file")
+		return errors.New("mygraphics: cannot open not-jpg file")
 	}
 
 	mw := imagick.NewMagickWand()
@@ -103,6 +115,6 @@ func (im ImageMagickInternals) ReadFile(myPath string) (Image, error) {
 	log.Println("model           = ", model)
 	log.Println("created         = ", created)
 
-	return im.image, nil
+	return nil
 
 }
