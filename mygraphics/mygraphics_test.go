@@ -2,38 +2,35 @@ package mygraphics
 
 import (
 	"log"
-	"os"
-	"path/filepath"
 	"testing"
 )
 
-func TestInterface(t *testing.T) {
-	log.Println("@@@ TestInterface")
+func TestReadFileMock(t *testing.T) {
+	log.Println("@@@ TestReadFile")
 
-	var i1 ImageHandler
+	mImg, _ := NewProcessMockImages()
 
-	i1 = Interface01{"undefined"}
+	var testImageHandler ImageHandler
 
-	i1.ReadFile("test01.jpg")
+	testImageHandler = mImg
 
-	i1 = ImageMagickInternals{}
-
-	i1.ReadFile("test01.jpg")
+	testImageHandler.ReadFileFromPath("file01")
+	testImageHandler.ReadFileFromPath("file02")
 
 }
 
 func deleteOldFiles() {
 	log.Println("@@@ deleteOldFiles")
-	files, err := filepath.Glob("20*jpg")
-	if err != nil {
-		panic(err)
-	}
-	for _, f := range files {
-		log.Println("delete file ", f)
-		if err := os.Remove(f); err != nil {
-			panic(err)
-		}
-	}
+	// files, err := filepath.Glob("20*jpg")
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// for _, f := range files {
+	// 	log.Println("delete file ", f)
+	// 	if err := os.Remove(f); err != nil {
+	// 		panic(err)
+	// 	}
+	// }
 }
 
 // TestReadmetadata just to verify the actual pictures
@@ -77,7 +74,7 @@ func TestResizedImage(t *testing.T) {
 
 	log.Println("@@@ TestResizedImage")
 
-	deleteOldFiles()
+	//deleteOldFiles()
 
 	//img1, _ := ReadMetaInfo("test01.jpg")
 	//WriteResizedImages(img1)

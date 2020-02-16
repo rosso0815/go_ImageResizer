@@ -12,12 +12,10 @@ type Image struct {
 
 // ImageHandler used for test
 type ImageHandler interface {
-	ReadFileFromPath(path string) error
-
-	//SaveFileResized() (err error)
+	ReadFileFromPath(path string) (err error)
 }
 
-// ImageProcessor hadles the execution etc
-type ImageProcessor interface {
-	ProcessImages(imageHandler ImageHandler) error
-}
+// ImageProcessor handles the execution etc
+// type ImageProcessor interface {
+// 	ProcessImage(imageHandler ImageHandler) (err error)
+// }

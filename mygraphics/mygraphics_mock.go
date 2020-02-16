@@ -1,20 +1,29 @@
 package mygraphics
 
-// ImageProcess based implementation
-// type ImageProcess struct {
-// 	fabric string
-// }
+import (
+	"log"
+)
 
-// func init() {
-// 	imagick.Initialize()
-// 	defer imagick.Terminate()
-// }
+// MockImage to play
+type MockImage struct {
+	fabric string
+}
 
-// // ProcessImages handles the execution etc
-// func (ip *ImageProcess) ProcessImages(imageHandler ImageHandler) (err error) {
-// 	log.Println("ProcessImages")
-// 	return nil
-// }
+func init() {
+	log.Println("@@@ mock init")
+}
+
+// NewProcessMockImages handles the execution etc
+func NewProcessMockImages() (*MockImage, error) {
+	log.Println("@@@ NewProcessMockImages")
+	return &MockImage{fabric: "hellau"}, nil
+}
+
+// ReadFileFromPath ddd
+func (mi *MockImage) ReadFileFromPath(path string) (err error) {
+	log.Println("@@@ ReadFileFromPath", path)
+	return nil
+}
 
 // func getImageProcessor() (*ImageProcess, error) {
 // 	return &ImageProcess{fabric: "hellau"}, nil
@@ -85,39 +94,4 @@ package mygraphics
 // 	}
 
 // 	return im.image, nil
-// }
-
-// ReadFileFromPath read the info from path
-// wand can be nil
-// func (im *Image) ReadFileFromPath(myPath string) error {
-
-// 	log.Println("@@@ ReadMetaInfo path=", myPath)
-// 	log.Println("path.Ext=", strings.ToLower(path.Ext(myPath)), "xxx")
-
-// 	myExt := strings.ToLower(path.Ext(myPath))
-
-// 	// error by not jpg files ...
-// 	if strings.Compare(myExt, ".jpg") != 0 {
-// 		return errors.New("mygraphics: cannot open not-jpg file")
-// 	}
-
-// 	mw := imagick.NewMagickWand()
-
-// 	mw.ReadImage(myPath)
-
-// 	w := mw.GetImageWidth()
-// 	h := mw.GetImageHeight()
-// 	make := mw.GetImageProperty("exif:Make")
-// 	model := mw.GetImageProperty("exif:Model")
-// 	model = strings.ReplaceAll(model, " ", "")
-// 	created := mw.GetImageProperty("exif:DateTimeOriginal")
-
-// 	log.Println("width           = ", w)
-// 	log.Println("height          = ", h)
-// 	log.Println("attribute make  = ", make)
-// 	log.Println("model           = ", model)
-// 	log.Println("created         = ", created)
-
-// 	return nil
-
 // }
