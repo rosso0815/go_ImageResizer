@@ -5,17 +5,23 @@ import (
 	"testing"
 )
 
-func TestReadFileMock(t *testing.T) {
+func TestReadFile(t *testing.T) {
 	log.Println("@@@ TestReadFile")
 
-	mImg, _ := NewProcessMockImages()
+	mImg1, _ := NewProcessMockImages()
 
 	var testImageHandler ImageHandler
 
-	testImageHandler = mImg
+	testImageHandler = mImg1
 
-	testImageHandler.ReadFileFromPath("file01")
-	testImageHandler.ReadFileFromPath("file02")
+	testImageHandler.ReadFileFromPath("test01.jpg")
+	testImageHandler.ReadFileFromPath("test02.jpg")
+
+	mImg2, _ := NewProcessImplImages()
+
+	testImageHandler = mImg2
+	testImageHandler.ReadFileFromPath("test01.jpg")
+	testImageHandler.ReadFileFromPath("test02.jpg")
 
 }
 

@@ -1,14 +1,33 @@
 package mygraphics
 
-// ImageProcess based implementation
-// type ImageProcess struct {
-// 	fabric string
-// }
+import (
+	"log"
 
-// func init() {
-// 	imagick.Initialize()
-// 	defer imagick.Terminate()
-// }
+	"gopkg.in/gographics/imagick.v2/imagick"
+)
+
+// ImageProcess based implementation
+type ImageProcess struct {
+	fabric string
+}
+
+func init() {
+	log.Println("mygraphics_impl -> init")
+	imagick.Initialize()
+	defer imagick.Terminate()
+}
+
+// NewProcessImplImages to do the real stuff
+func NewProcessImplImages() (*ImageProcess, error) {
+	log.Println("@@@ NewProcessImplImages")
+	return &ImageProcess{fabric: "real-worker"}, nil
+}
+
+// ReadFileFromPath does the thing
+func (ip *ImageProcess) ReadFileFromPath(path string) (err error) {
+	log.Println("ReadFileFromPath")
+	return nil
+}
 
 // // ProcessImages handles the execution etc
 // func (ip *ImageProcess) ProcessImages(imageHandler ImageHandler) (err error) {

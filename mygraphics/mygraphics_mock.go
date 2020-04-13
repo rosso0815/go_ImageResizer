@@ -9,9 +9,9 @@ type MockImage struct {
 	fabric string
 }
 
-func init() {
-	log.Println("@@@ mock init")
-}
+// func init() {
+// 	log.Println("@@@ mock init")
+// }
 
 // NewProcessMockImages handles the execution etc
 func NewProcessMockImages() (*MockImage, error) {

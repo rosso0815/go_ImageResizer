@@ -10,12 +10,7 @@ type Image struct {
 	path    string
 }
 
-// ImageHandler used for test
+// ImageHandler used for ?
 type ImageHandler interface {
 	ReadFileFromPath(path string) (err error)
 }
-
-// ImageProcessor handles the execution etc
-// type ImageProcessor interface {
-// 	ProcessImage(imageHandler ImageHandler) (err error)
-// }
