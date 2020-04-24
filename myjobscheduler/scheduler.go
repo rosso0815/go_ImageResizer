@@ -1,4 +1,4 @@
-package mygraphics
+package myjobscheduler
 
 import (
 	"io/ioutil"

@@ -4,9 +4,8 @@ import (
 	"log"
 	"os"
 
-	"github.com/urfave/cli"
-
 	"github.com/rosso0815/go_ImageResizer/mygraphics"
+	"github.com/urfave/cli"
 )
 
 func init() {
@@ -25,8 +24,7 @@ func main() {
 	app.Version = "1.0.0"
 	app.Commands = []cli.Command{
 		{
-			Name: "convert",
-			//Aliases: []string{"a"},
+			Name:  "convert",
 			Usage: "convert a given path the included images",
 			Action: func(c *cli.Context) error {
 				mygraphics.RunConvert(c.Args())
