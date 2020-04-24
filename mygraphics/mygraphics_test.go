@@ -8,21 +8,25 @@ import (
 func TestReadFile(t *testing.T) {
 	log.Println("@@@ TestReadFile")
 
-	mImg1, _ := NewProcessMockImages()
-
 	var testImageHandler ImageHandler
 
-	testImageHandler = mImg1
-
-	testImageHandler.ReadFileFromPath("test01.jpg")
-	testImageHandler.ReadFileFromPath("test02.jpg")
+	// mImg1, _ := NewProcessMockImages()
+	// testImageHandler = mImg1
+	// testImageHandler.ReadFileFromPath("test01.jpg")
+	// testImageHandler.ReadFileFromPath("test02.jpg")
 
 	mImg2, _ := NewProcessImplImages()
 
 	testImageHandler = mImg2
-	testImageHandler.ReadFileFromPath("test01.jpg")
-	testImageHandler.ReadFileFromPath("test02.jpg")
 
+	testImageHandler.ReadFileFromPath("test01.jpg")
+
+	log.Println("GetInfo =", testImageHandler.GetInfo())
+	testImageHandler.SaveFileResized()
+
+	// a image without exif-data
+	//testImageHandler.ReadFileFromPath("test02.jpg")
+	//log.Println("GetInfo =", testImageHandler.GetInfo())
 }
 
 func deleteOldFiles() {

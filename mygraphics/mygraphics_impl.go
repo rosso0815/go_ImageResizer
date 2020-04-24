@@ -1,7 +1,11 @@
 package mygraphics
 
 import (
+	"errors"
 	"log"
+	"path"
+	"strings"
+	"time"
 
 	"gopkg.in/gographics/imagick.v2/imagick"
 )
@@ -9,6 +13,8 @@ import (
 // ImageProcess based implementation
 type ImageProcess struct {
 	fabric string
+	mw     *imagick.MagickWand
+	img    Image
 }
 
 func init() {
@@ -24,119 +30,80 @@ func NewProcessImplImages() (*ImageProcess, error) {
 }
 
 // ReadFileFromPath does the thing
-func (ip *ImageProcess) ReadFileFromPath(path string) (err error) {
-	log.Println("ReadFileFromPath")
+func (ip *ImageProcess) ReadFileFromPath(lPath string) (err error) {
+	log.Println("@@@ ReadFileFromPath path=", lPath)
+	log.Println("path.Ext=", strings.ToLower(path.Ext(lPath)), "xxx")
+	myExt := strings.ToLower(path.Ext(lPath))
+
+	// error by not jpg files ...
+	if strings.Compare(myExt, ".jpg") != 0 {
+		return errors.New("mygraphics: cannot open not-jpg file")
+	}
+
+	ip.mw = imagick.NewMagickWand()
+	ip.mw.ReadImage(lPath)
+	ip.img.width = ip.mw.GetImageWidth()
+	ip.img.heigth = ip.mw.GetImageHeight()
+	ip.img.make = ip.mw.GetImageProperty("exif:Make")
+	ip.img.model = ip.mw.GetImageProperty("exif:Model")
+	ip.img.model = strings.ReplaceAll(ip.img.model, " ", "")
+	ip.img.created = ip.mw.GetImageProperty("exif:DateTimeOriginal")
+	ip.img.path = lPath
 	return nil
 }
 
-// // ProcessImages handles the execution etc
-// func (ip *ImageProcess) ProcessImages(imageHandler ImageHandler) (err error) {
-// 	log.Println("ProcessImages")
-// 	return nil
-// }
+// SaveFileResized reads the file and analyze it
+// TODO handle folder of actual file
+func (ip *ImageProcess) SaveFileResized() (err error) {
 
-// func getImageProcessor() (*ImageProcess, error) {
-// 	return &ImageProcess{fabric: "hellau"}, nil
-// }
+	log.Println("@@@ SaveFileResized")
+	//var err error
+	if (ip.img.heigth < ip.img.width) && (ip.img.width > 1980) {
 
-// ImageMagickInternals play
-// type ImageMagickInternals struct {
-// 	wand  *imagick.MagickWand
-// 	image Image
-// }
+		scale := ip.img.width * 1000 / 1980
+		newHeigth := ip.img.heigth * 1000 / scale
+		log.Println("image width > 1980 scale=", scale, " newHheigth=", newHeigth)
 
-// Interface01 play
-// type Interface01 struct {
-// 	Path string
-// }
+		//err = image.wand.ResizeImage(uint(1980), newHeigth, imagick.FILTER_LANCZOS)
+		err = ip.mw.ResizeImage(uint(1980), newHeigth, imagick.FILTER_LANCZOS, 1)
+		if err != nil {
+			panic(err)
+		}
 
-// ReadFile for test interface
-// func (if01 Interface01) ReadFile(path string) (err error) {
-// 	log.Println("@@@ if01 ReadData path       = " + path)
-// 	log.Println("@@@ if01 ReadData local_path = " + if01.Path)
-// 	return nil
-// }
+		// convert_date
+		layout := "2006:01:02 15:04:05"
+		tm, err := time.Parse(layout, ip.img.created)
+		if err != nil {
+			return errors.New("mygraphics: canno parse date")
+		}
+		log.Printf("dateTimeOriginal=%q t=%v\n", ip.img.created, tm)
 
-// ReadFile reads the file and analyze it
-// func SaveFileResized(filePath string) (img Image, err error) {
+		fixedModel := strings.Replace(ip.img.model, "-", "", 10)
+		log.Println("image.model=", ip.img.model, " fixedModel=", fixedModel)
+		newFilename := tm.Format("20060102_150405") +
+			"_" +
+			strings.ToLower(ip.img.make) +
+			"_" +
+			strings.ToLower(fixedModel) +
+			".jpg"
 
-// 	log.Println("@@@ SaveFileResized")
-// 	//var err error
-// 	if (im.image.heigth < im.image.width) && (im.image.width > 1980) {
+		log.Println("new_filename", newFilename)
 
-// 		scale := im.image.width * 1000 / 1980
-// 		newHeigth := im.image.heigth * 1000 / scale
-// 		log.Println("image width > 1980 scale=", scale, " newHheigth=", newHeigth)
+		log.Println("dir  = ", path.Dir(""))
+		log.Println("base = ", path.Base(ip.img.path))
 
-// 		//err = image.wand.ResizeImage(uint(1980), newHeigth, imagick.FILTER_LANCZOS)
-// 		err = im.wand.ResizeImage(uint(1980), newHeigth, imagick.FILTER_LANCZOS, 1)
-// 		if err != nil {
-// 			panic(err)
-// 		}
+		newpath := path.Join(path.Dir(ip.img.path), path.Base(newFilename))
+		log.Println("newpath=", newpath)
 
-// 		// convert_date
-// 		layout := "2006:01:02 15:04:05"
-// 		tm, err := time.Parse(layout, im.image.created)
-// 		if err != nil {
-// 			return im.image, errors.New("mygraphics: canno parse date")
-// 		}
-// 		log.Printf("dateTimeOriginal=%q t=%v\n", im.image.created, tm)
+		ip.mw.SetImageCompressionQuality(95)
+		ip.mw.WriteImage(newpath)
+	}
 
-// 		fixedModel := strings.Replace(im.image.model, "-", "", 10)
-// 		log.Println("image.model=", im.image.model, " fixedModel=", fixedModel)
-// 		newFilename := tm.Format("20060102_150405") +
-// 			"_" +
-// 			strings.ToLower(im.image.make) +
-// 			"_" +
-// 			strings.ToLower(fixedModel) +
-// 			".jpg"
+	return nil
+}
 
-// 		log.Println("new_filename", newFilename)
-
-// 		log.Println("dir  = ", path.Dir(""))
-// 		log.Println("base = ", path.Base(im.image.path))
-
-// 		newpath := path.Join(path.Dir(im.image.path), path.Base(newFilename))
-// 		log.Println("newpath=", newpath)
-
-// 		im.wand.SetImageCompressionQuality(95)
-// 		im.wand.WriteImage(newpath)
-// 	}
-
-// 	return im.image, nil
-// }
-
-// ReadFileFromPath read the info from path
-// wand can be nil
-// func (im *Image) ReadFileFromPath(myPath string) error {
-
-// 	log.Println("@@@ ReadMetaInfo path=", myPath)
-// 	log.Println("path.Ext=", strings.ToLower(path.Ext(myPath)), "xxx")
-
-// 	myExt := strings.ToLower(path.Ext(myPath))
-
-// 	// error by not jpg files ...
-// 	if strings.Compare(myExt, ".jpg") != 0 {
-// 		return errors.New("mygraphics: cannot open not-jpg file")
-// 	}
-
-// 	mw := imagick.NewMagickWand()
-
-// 	mw.ReadImage(myPath)
-
-// 	w := mw.GetImageWidth()
-// 	h := mw.GetImageHeight()
-// 	make := mw.GetImageProperty("exif:Make")
-// 	model := mw.GetImageProperty("exif:Model")
-// 	model = strings.ReplaceAll(model, " ", "")
-// 	created := mw.GetImageProperty("exif:DateTimeOriginal")
-
-// 	log.Println("width           = ", w)
-// 	log.Println("height          = ", h)
-// 	log.Println("attribute make  = ", make)
-// 	log.Println("model           = ", model)
-// 	log.Println("created         = ", created)
-
-// 	return nil
-
-// }
+// GetInfo reads the file and analyze it
+func (ip *ImageProcess) GetInfo() (img Image) {
+	log.Println("@@@ GetInfo")
+	return ip.img
+}

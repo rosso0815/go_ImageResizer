@@ -10,7 +10,7 @@ export CGO_CFLAGS_ALLOW='-Xpreprocessor'
 pkg-config --cflags --libs MagickWand
 go clean --modcache && go clean -i -r -cache -testcache -modcache
 GODEBUG=gocacheverify=1 go get -u gopkg.in/gographics/imagick.v2/imagick
-GOFLAGS="-count=1"  go test ./mygraphics/
+GOFLAGS="-count=1"  go test -race ./mygraphics/
 
 #------------------------------------------------------------------------------
 

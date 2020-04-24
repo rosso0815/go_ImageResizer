@@ -4,8 +4,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/rosso0815/go_ImageResizer/mygraphics"
 	"github.com/urfave/cli"
+
+	"github.com/rosso0815/go_ImageResizer/mygraphics"
 )
 
 func init() {
@@ -21,7 +22,7 @@ func main() {
 	app := cli.NewApp()
 	app.Name = "go_myImageResizer"
 	app.Usage = "path"
-	app.Version = "0.0.1"
+	app.Version = "1.0.0"
 	app.Commands = []cli.Command{
 		{
 			Name: "convert",
