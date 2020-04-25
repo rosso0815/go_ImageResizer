@@ -4,8 +4,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/rosso0815/go_ImageResizer/mygraphics"
 	"github.com/urfave/cli"
+
+	"github.com/rosso0815/go_ImageResizer/myjobscheduler"
 )
 
 func init() {
@@ -27,7 +28,8 @@ func main() {
 			Name:  "convert",
 			Usage: "convert a given path the included images",
 			Action: func(c *cli.Context) error {
-				mygraphics.RunConvert(c.Args())
+				//mygraphics.RunConvert(c.Args())
+				myjobscheduler.RunConvert(c.Args())
 				return nil
 			},
 		},
