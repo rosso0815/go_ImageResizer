@@ -9,83 +9,42 @@ import (
 	"github.com/rosso0815/go_ImageResizer/mygraphics"
 )
 
-func init() {
-	log.Println("mygraphics_woker -> init")
+// RunConvert does the job
+func RunConvert(path string) error {
+	log.Println("@@@ runConvert path=", path)
+
+	if len(path) == 0 {
+		path = "."
+	}
+	log.Println("path=", path)
+
+	if stat, err := os.Stat(path); err == nil && stat.IsDir() {
+		log.Println(path, "is a directory")
+	} else {
+		log.Fatal("dir ", os.Args[1], " => this is not a directory , exit")
+	}
+
+	files, err := ioutil.ReadDir(path)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, f := range files {
+		if f.IsDir() == false {
+			abs, _ := filepath.Abs(filepath.Join(path, f.Name()))
+			log.Println("abs=", abs)
+			convertFile(abs)
+		}
+	}
+	log.Println("close(jobs)")
+	return nil
 }
 
 func convertFile(lPath string) {
 	log.Println("@@@ convertFile", lPath)
-	//log.Println("worker", id, "started job", j)
-
 	mImg, _ := mygraphics.NewProcessImplImages()
 	imageHandler := mImg
 	imageHandler.ReadFileFromPath(lPath)
 	log.Println("GetInfo =", imageHandler.GetInfo())
 	imageHandler.SaveFileResized()
-	//log.Println("worker", id, "finished job", j)
-}
-
-func workerConvert(id int, jobs <-chan string, results chan<- string) {
-	for j := range jobs {
-		//log.Println("worker", id, "started job", j)
-		//mImg, _ := NewProcessImplImages()
-		//imageHandler := mImg
-		//imageHandler.ReadFileFromPath(j)
-		//log.Println("GetInfo =", imageHandler.GetInfo())
-		//imageHandler.SaveFileResized()
-		//log.Println("worker", id, "finished job", j)
-		results <- j + " done"
-	}
-}
-
-// RunConvert does the job
-func RunConvert(paths []string) error {
-
-	log.Println("@@@ runConvert path=", paths)
-
-	if len(paths) == 0 {
-		log.Println("paths.length == 0")
-		paths = append(paths, ".")
-	}
-
-	for _, path := range paths {
-		log.Println("path=", path)
-
-		if stat, err := os.Stat(path); err == nil && stat.IsDir() {
-			log.Println(path, "is a directory")
-		} else {
-			log.Fatal("dir ", os.Args[1], " => this is not a directory , exit")
-		}
-
-		// create 8 workers threads
-		// jobs := make(chan string, 8)
-		// results := make(chan string, 10000)
-		// for w := 1; w <= 8; w++ {
-		// 	go workerConvert(w, jobs, results)
-		// }
-
-		files, err := ioutil.ReadDir(path)
-		if err != nil {
-			log.Fatal(err)
-		}
-		// maxJobs := 0
-		for _, f := range files {
-			if f.IsDir() == false {
-				abs, _ := filepath.Abs(filepath.Join(path, f.Name()))
-				log.Println("abs=", abs)
-				// add to worker - queue
-				// jobs <- abs
-				// maxJobs++
-				convertFile(abs)
-				//log.Println("maxJobs", maxJobs)
-			}
-		}
-		log.Println("close(jobs)")
-		// close(jobs)
-
-		// for a := 1; a <= maxJobs; a++ {
-		// 	log.Println("result ", a, " ", <-results)
-		// }
-	}
-	return nil
 }

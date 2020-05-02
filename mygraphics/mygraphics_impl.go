@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/gographics/imagick.v2/imagick"
+	"gopkg.in/gographics/imagick.v3/imagick"
 )
 
 // ImageProcess based implementation
@@ -32,11 +32,13 @@ func NewProcessImplImages() (*ImageProcess, error) {
 // ReadFileFromPath does the thing
 func (ip *ImageProcess) ReadFileFromPath(lPath string) (err error) {
 	log.Println("@@@ ReadFileFromPath path=", lPath)
-	log.Println("path.Ext=", strings.ToLower(path.Ext(lPath)), "xxx")
+	log.Println("path.Ext=", strings.ToLower(path.Ext(lPath)))
 	myExt := strings.ToLower(path.Ext(lPath))
 
 	// error by not jpg files ...
-	if strings.Compare(myExt, ".jpg") != 0 {
+	// DONE accept HEIC also
+	if !strings.Contains(".jpg .heic", myExt) {
+		log.Println("NOT .jpg .heic", myExt)
 		return errors.New("mygraphics: cannot open not-jpg file")
 	}
 
@@ -49,55 +51,63 @@ func (ip *ImageProcess) ReadFileFromPath(lPath string) (err error) {
 	ip.img.model = strings.ReplaceAll(ip.img.model, " ", "")
 	ip.img.created = ip.mw.GetImageProperty("exif:DateTimeOriginal")
 	ip.img.path = lPath
+	log.Println("found", ip.img)
 	return nil
 }
 
 // SaveFileResized reads the file and analyze it
 // TODO handle folder of actual file
+// TODO handle correct extension
 func (ip *ImageProcess) SaveFileResized() (err error) {
 
-	log.Println("@@@ SaveFileResized")
-	//var err error
-	if (ip.img.heigth < ip.img.width) && (ip.img.width > 1980) {
+	log.Println("@@@ SaveFileResized, heigth:", ip.img.heigth, " width:", ip.img.width)
 
-		scale := ip.img.width * 1000 / 1980
-		newHeigth := ip.img.heigth * 1000 / scale
-		log.Println("image width > 1980 scale=", scale, " newHheigth=", newHeigth)
+	// TODO : possibel as cmd args defined ?
+	var (
+		newWidth  uint = 1980
+		newHeigth uint = 960
+	)
 
-		//err = image.wand.ResizeImage(uint(1980), newHeigth, imagick.FILTER_LANCZOS)
-		err = ip.mw.ResizeImage(uint(1980), newHeigth, imagick.FILTER_LANCZOS, 1)
-		if err != nil {
-			panic(err)
-		}
-
-		// convert_date
-		layout := "2006:01:02 15:04:05"
-		tm, err := time.Parse(layout, ip.img.created)
-		if err != nil {
-			return errors.New("mygraphics: canno parse date")
-		}
-		log.Printf("dateTimeOriginal=%q t=%v\n", ip.img.created, tm)
-
-		fixedModel := strings.Replace(ip.img.model, "-", "", 10)
-		log.Println("image.model=", ip.img.model, " fixedModel=", fixedModel)
-		newFilename := tm.Format("20060102_150405") +
-			"_" +
-			strings.ToLower(ip.img.make) +
-			"_" +
-			strings.ToLower(fixedModel) +
-			".jpg"
-
-		log.Println("new_filename", newFilename)
-
-		log.Println("dir  = ", path.Dir(""))
-		log.Println("base = ", path.Base(ip.img.path))
-
-		newpath := path.Join(path.Dir(ip.img.path), path.Base(newFilename))
-		log.Println("newpath=", newpath)
-
-		ip.mw.SetImageCompressionQuality(95)
-		ip.mw.WriteImage(newpath)
+	// calculate newWidth or newHeigth based on existing values
+	if (ip.img.heigth < ip.img.width) && (ip.img.width > newWidth) {
+		log.Println("resize width > ", newWidth)
+		scale := ip.img.width * 1000 / newWidth
+		newHeigth = ip.img.heigth * 1000 / scale
+	} else if ip.img.heigth > 960 {
+		log.Println("resize width heigth > 960")
+		scale := ip.img.heigth * 1000 / newHeigth
+		newWidth = ip.img.width * 1000 / scale
+	} else {
+		log.Println("no resize possible")
+		return nil
 	}
+	log.Println("newWidth=", newWidth, "newHeigth", newHeigth)
+
+	// resize the picture
+	err = ip.mw.ResizeImage(newWidth, newHeigth, imagick.FILTER_LANCZOS)
+	if err != nil {
+		panic(err)
+	}
+
+	// convert_date
+	layout := "2006:01:02 15:04:05"
+	tm, err := time.Parse(layout, ip.img.created)
+	if err != nil {
+		return errors.New("mygraphics: canno parse date")
+	}
+
+	// calculate the new filename
+	fixedModel := strings.Replace(ip.img.model, "-", "", 10)
+	log.Println("image.model=", ip.img.model, " fixedModel=", fixedModel)
+	newFilename := tm.Format("20060102_150405") +
+		"_" +
+		strings.ToLower(ip.img.make) +
+		"_" +
+		strings.ToLower(fixedModel) +
+		".jpg"
+	newpath := path.Join(path.Dir(ip.img.path), path.Base(newFilename))
+	ip.mw.SetImageCompressionQuality(95)
+	ip.mw.WriteImage(newpath)
 
 	return nil
 }

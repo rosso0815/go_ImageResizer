@@ -4,33 +4,26 @@ import (
 	"log"
 	"os"
 
-	"github.com/urfave/cli"
+	"github.com/urfave/cli/v2"
 
 	"github.com/rosso0815/go_ImageResizer/myjobscheduler"
 )
 
-func init() {
-	log.Println("main -> init")
-}
-
 func main() {
-
-	//runtime.GOMAXPROCS(8)
 	log.SetFlags(log.Ldate | log.Ltime | log.Lshortfile)
-	log.Println("start")
 
-	app := cli.NewApp()
-	app.Name = "go_myImageResizer"
-	app.Usage = "path"
-	app.Version = "1.0.0"
-	app.Commands = []cli.Command{
-		{
-			Name:  "convert",
-			Usage: "convert a given path the included images",
-			Action: func(c *cli.Context) error {
-				//mygraphics.RunConvert(c.Args())
-				myjobscheduler.RunConvert(c.Args())
-				return nil
+	app := &cli.App{
+		Name:    "go_ImageResizer",
+		Version: "1.0.0",
+		Commands: []*cli.Command{
+			{
+				Name:    "convert",
+				Aliases: []string{"c"},
+				Usage:   "convert a directory of images",
+				Action: func(c *cli.Context) error {
+					myjobscheduler.RunConvert(c.Args().First())
+					return nil
+				},
 			},
 		},
 	}
@@ -39,6 +32,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	log.Println("@@@ done")
 }
