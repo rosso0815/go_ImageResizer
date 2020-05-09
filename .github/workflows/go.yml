@@ -20,11 +20,8 @@ jobs:
       id: go
     
     -name: check all
-      run: | 
-        ls -l
-        uname -a
-
-
+      run: ls -l
+    # uname -a
     # - name: Check out code into the Go module directory
     #   uses: actions/checkout@v2
 
