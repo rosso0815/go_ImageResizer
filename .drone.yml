@@ -3,7 +3,7 @@ kind: pipeline
 name: build_all
 steps:
   - name: build_image
-    image: golang:1.13
+    image: centos:centos7
     commands:
-      - echo build the image
-      - docker build .
+      - chmod u+rx  ./buildInstall.sh
+      - ./buildInstall.sh
