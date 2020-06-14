@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"gopkg.in/gographics/imagick.v3/imagick"
+	"gopkg.in/gographics/imagick.v2/imagick"
 )
 
 // ImageProcess based implementation
@@ -84,7 +84,7 @@ func (ip *ImageProcess) SaveFileResized() (err error) {
 	log.Println("newWidth=", newWidth, "newHeigth", newHeigth)
 
 	// resize the picture
-	err = ip.mw.ResizeImage(newWidth, newHeigth, imagick.FILTER_LANCZOS)
+	err = ip.mw.ResizeImage(newWidth, newHeigth, imagick.FILTER_LANCZOS, 1)
 	if err != nil {
 		panic(err)
 	}
