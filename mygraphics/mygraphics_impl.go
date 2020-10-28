@@ -23,10 +23,17 @@ func init() {
 	defer imagick.Terminate()
 }
 
-// NewProcessImplImages to do the real stuff
-func NewProcessImplImages() (*ImageProcess, error) {
+// NewImageMagick6Handler to do the real stuff
+func NewImageMagick6Handler() *ImageHandler {
 	log.Println("@@@ NewProcessImplImages")
-	return &ImageProcess{fabric: "real-worker"}, nil
+	return &IM6_ReadFile
+	//GetInfo() (img Image)
+	//return &ImageProcess{fabric: "real-worker"}, nil
+}
+
+func IM6_ReadFile(path string) (err error) {
+	log.Println("@@@ IM6_ReadFile", path)
+	return nil
 }
 
 // ReadFileFromPath does the thing

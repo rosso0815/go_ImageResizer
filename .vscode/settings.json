@@ -1,0 +1,19 @@
+{
+    "workbench.startupEditor": "newUntitledFile",
+    "editor.fontSize": 16,
+    "editor.fontFamily": "Menlo",
+    "editor.fontLigatures": null,
+    "explorer.confirmDelete": false,
+    "terminal.integrated.automationShell.linux": "",
+    "terminal.integrated.fontFamily": "Monaco",
+    "terminal.integrated.fontSize": 16,
+    "terminal.integrated.lineHeight": 1,
+    "go.formatTool": "goimports",
+    "editor.minimap.enabled": false,
+    "go.generateTestsFlags": [
+        "-v"
+    ],
+    "go.lintOnSave": "file",
+    "go.logging.level": "verbose",
+    "go.testFlags": ["-v"],
+}

@@ -5,25 +5,23 @@ import (
 	"testing"
 )
 
-func TestReadFile(t *testing.T) {
-	log.Println("@@@ TestReadFile")
+func Test_Single_ReadFile(t *testing.T) {
 
-	var testImageHandler ImageHandler
+	log.Println("@@@ Test_Single_ReadFile")
+
+	var ih ImageHandler
+	ih = NewImageMagick6Handler()
+	ih.ReadFile("test01.jpg")
 
 	// mImg1, _ := NewProcessMockImages()
 	// testImageHandler = mImg1
 	// testImageHandler.ReadFileFromPath("test01.jpg")
 	// testImageHandler.ReadFileFromPath("test02.jpg")
-
-	mImg2, _ := NewProcessImplImages()
-
-	testImageHandler = mImg2
-
-	testImageHandler.ReadFileFromPath("test01.jpg")
-
-	log.Println("GetInfo =", testImageHandler.GetInfo())
-	testImageHandler.SaveFileResized()
-
+	// mImg2, _ := NewProcessImplImages()
+	// testImageHandler = mImg2
+	// testImageHandler.ReadFileFromPath("test01.jpg")
+	// log.Println("GetInfo =", testImageHandler.GetInfo())
+	// testImageHandler.SaveFileResized()
 	// a image without exif-data
 	//testImageHandler.ReadFileFromPath("test02.jpg")
 	//log.Println("GetInfo =", testImageHandler.GetInfo())
@@ -84,13 +82,13 @@ func TestResizedImage(t *testing.T) {
 
 	log.Println("@@@ TestResizedImage")
 
-	//deleteOldFiles()
+	// deleteOldFiles()
 
-	//img1, _ := ReadMetaInfo("test01.jpg")
-	//WriteResizedImages(img1)
+	// img1, _ := ReadMetaInfo("test01.jpg")
+	// WriteResizedImages(img1)
 
-	//img2, _ := ReadMetaInfo("test02.jpg")
-	//WriteResizedImages(img2)
+	// img2, _ := ReadMetaInfo("test02.jpg")
+	// WriteResizedImages(img2)
 
-	//deleteOldFiles()
+	// deleteOldFiles()
 }
