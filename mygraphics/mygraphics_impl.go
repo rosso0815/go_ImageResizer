@@ -26,7 +26,8 @@ func init() {
 // NewImageMagick6Handler to do the real stuff
 func NewImageMagick6Handler() *ImageHandler {
 	log.Println("@@@ NewProcessImplImages")
-	return &IM6_ReadFile
+	return nil
+	//return &IM6_ReadFile
 	//GetInfo() (img Image)
 	//return &ImageProcess{fabric: "real-worker"}, nil
 }

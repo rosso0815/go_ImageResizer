@@ -5,8 +5,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-
-	"github.com/rosso0815/go_ImageResizer/mygraphics"
 )
 
 // RunConvert does the job
@@ -42,9 +40,9 @@ func RunConvert(path string) error {
 
 func convertFile(lPath string) {
 	log.Println("@@@ convertFile", lPath)
-	mImg, _ := mygraphics.NewProcessImplImages()
-	imageHandler := mImg
-	imageHandler.ReadFileFromPath(lPath)
-	log.Println("GetInfo =", imageHandler.GetInfo())
-	imageHandler.SaveFileResized()
+	// mImg, _ := mygraphics.NewProcessImplImages()
+	// imageHandler := mImg
+	// imageHandler.ReadFileFromPath(lPath)
+	// log.Println("GetInfo =", imageHandler.GetInfo())
+	// imageHandler.SaveFileResized()
 }

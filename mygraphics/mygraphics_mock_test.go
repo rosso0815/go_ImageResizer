@@ -10,7 +10,9 @@ func Test_Single_ReadFile(t *testing.T) {
 	log.Println("@@@ Test_Single_ReadFile")
 
 	var ih ImageHandler
-	ih = NewImageMagick6Handler()
+
+	ih = NewImageHandlerMock()
+
 	ih.ReadFile("test01.jpg")
 
 	// mImg1, _ := NewProcessMockImages()

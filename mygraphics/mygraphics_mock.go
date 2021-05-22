@@ -9,19 +9,19 @@ type MockImage struct {
 	fabric string
 }
 
-// func init() {
-// 	log.Println("@@@ mock init")
-// }
+func init() {
+	log.Println("@@@ mock init")
+}
 
 // NewProcessMockImages handles the execution etc
-func NewProcessMockImages() (*MockImage, error) {
-	log.Println("@@@ NewProcessMockImages")
-	return &MockImage{fabric: "hellau"}, nil
+func NewImageHandlerMock() *MockImage {
+	log.Println("@@@ NewImageHandlerMock")
+	return &MockImage{fabric: "hellau"}
 }
 
 // ReadFileFromPath ddd
-func (mi *MockImage) ReadFileFromPath(path string) (err error) {
-	log.Println("@@@ ReadFileFromPath", path)
+func (mi *MockImage) ReadFile(path string) (err error) {
+	log.Println("@@@ NewImageHandlerMock ReadFileFromPath", path)
 	return nil
 }
 
