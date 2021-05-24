@@ -11,7 +11,7 @@ import (
 )
 
 // ImageProcess based implementation
-type ImageProcess struct {
+type IM6Image struct {
 	fabric string
 	mw     *imagick.MagickWand
 	img    Image
@@ -24,21 +24,16 @@ func init() {
 }
 
 // NewImageMagick6Handler to do the real stuff
-func NewImageMagick6Handler() *ImageHandler {
-	log.Println("@@@ NewProcessImplImages")
-	return nil
+func NewImageMagick6Handler() *IM6Image {
+	log.Println("@@@ NewImageMagick6Handler")
+	// return nil
 	//return &IM6_ReadFile
 	//GetInfo() (img Image)
-	//return &ImageProcess{fabric: "real-worker"}, nil
-}
-
-func IM6_ReadFile(path string) (err error) {
-	log.Println("@@@ IM6_ReadFile", path)
-	return nil
+	return &IM6Image{fabric: "real-worker"}
 }
 
 // ReadFileFromPath does the thing
-func (ip *ImageProcess) ReadFileFromPath(lPath string) (err error) {
+func (im6 *IM6Image) ReadFile(lPath string) (err error) {
 	log.Println("@@@ ReadFileFromPath path=", lPath)
 	log.Println("path.Ext=", strings.ToLower(path.Ext(lPath)))
 	myExt := strings.ToLower(path.Ext(lPath))
@@ -50,25 +45,25 @@ func (ip *ImageProcess) ReadFileFromPath(lPath string) (err error) {
 		return errors.New("mygraphics: cannot open not-jpg file")
 	}
 
-	ip.mw = imagick.NewMagickWand()
-	ip.mw.ReadImage(lPath)
-	ip.img.width = ip.mw.GetImageWidth()
-	ip.img.heigth = ip.mw.GetImageHeight()
-	ip.img.make = ip.mw.GetImageProperty("exif:Make")
-	ip.img.model = ip.mw.GetImageProperty("exif:Model")
-	ip.img.model = strings.ReplaceAll(ip.img.model, " ", "")
-	ip.img.created = ip.mw.GetImageProperty("exif:DateTimeOriginal")
-	ip.img.path = lPath
-	log.Println("found", ip.img)
+	im6.mw = imagick.NewMagickWand()
+	im6.mw.ReadImage(lPath)
+	im6.img.width = im6.mw.GetImageWidth()
+	im6.img.heigth = im6.mw.GetImageHeight()
+	im6.img.make = im6.mw.GetImageProperty("exif:Make")
+	im6.img.model = im6.mw.GetImageProperty("exif:Model")
+	im6.img.model = strings.ReplaceAll(im6.img.model, " ", "")
+	im6.img.created = im6.mw.GetImageProperty("exif:DateTimeOriginal")
+	im6.img.path = lPath
+	log.Println("found", im6.img)
 	return nil
 }
 
 // SaveFileResized reads the file and analyze it
 // TODO handle folder of actual file
 // TODO handle correct extension
-func (ip *ImageProcess) SaveFileResized() (err error) {
+func (im6 *IM6Image) SaveFileResized() (err error) {
 
-	log.Println("@@@ SaveFileResized, heigth:", ip.img.heigth, " width:", ip.img.width)
+	log.Println("@@@ SaveFileResized, heigth:", im6.img.heigth, " width:", im6.img.width)
 
 	// TODO : possibel as cmd args defined ?
 	var (
@@ -77,14 +72,14 @@ func (ip *ImageProcess) SaveFileResized() (err error) {
 	)
 
 	// calculate newWidth or newHeigth based on existing values
-	if (ip.img.heigth < ip.img.width) && (ip.img.width > newWidth) {
+	if (im6.img.heigth < im6.img.width) && (im6.img.width > newWidth) {
 		log.Println("resize width > ", newWidth)
-		scale := ip.img.width * 1000 / newWidth
-		newHeigth = ip.img.heigth * 1000 / scale
-	} else if ip.img.heigth > 960 {
+		scale := im6.img.width * 1000 / newWidth
+		newHeigth = im6.img.heigth * 1000 / scale
+	} else if im6.img.heigth > 960 {
 		log.Println("resize width heigth > 960")
-		scale := ip.img.heigth * 1000 / newHeigth
-		newWidth = ip.img.width * 1000 / scale
+		scale := im6.img.heigth * 1000 / newHeigth
+		newWidth = im6.img.width * 1000 / scale
 	} else {
 		log.Println("no resize possible")
 		return nil
@@ -92,36 +87,36 @@ func (ip *ImageProcess) SaveFileResized() (err error) {
 	log.Println("newWidth=", newWidth, "newHeigth", newHeigth)
 
 	// resize the picture
-	err = ip.mw.ResizeImage(newWidth, newHeigth, imagick.FILTER_LANCZOS, 1)
+	err = im6.mw.ResizeImage(newWidth, newHeigth, imagick.FILTER_LANCZOS, 1)
 	if err != nil {
 		panic(err)
 	}
 
 	// convert_date
 	layout := "2006:01:02 15:04:05"
-	tm, err := time.Parse(layout, ip.img.created)
+	tm, err := time.Parse(layout, im6.img.created)
 	if err != nil {
 		return errors.New("mygraphics: canno parse date")
 	}
 
 	// calculate the new filename
-	fixedModel := strings.Replace(ip.img.model, "-", "", 10)
-	log.Println("image.model=", ip.img.model, " fixedModel=", fixedModel)
+	fixedModel := strings.Replace(im6.img.model, "-", "", 10)
+	log.Println("image.model=", im6.img.model, " fixedModel=", fixedModel)
 	newFilename := tm.Format("20060102_150405") +
 		"_" +
-		strings.ToLower(ip.img.make) +
+		strings.ToLower(im6.img.make) +
 		"_" +
 		strings.ToLower(fixedModel) +
 		".jpg"
-	newpath := path.Join(path.Dir(ip.img.path), path.Base(newFilename))
-	ip.mw.SetImageCompressionQuality(95)
-	ip.mw.WriteImage(newpath)
+	newpath := path.Join(path.Dir(im6.img.path), path.Base(newFilename))
+	im6.mw.SetImageCompressionQuality(95)
+	im6.mw.WriteImage(newpath)
 
 	return nil
 }
 
 // GetInfo reads the file and analyze it
-func (ip *ImageProcess) GetInfo() (img Image) {
-	log.Println("@@@ GetInfo")
-	return ip.img
+func (im6 *IM6Image) GetInfo() (img Image) {
+	log.Println("@@@ GetInfo", im6.img)
+	return im6.img
 }

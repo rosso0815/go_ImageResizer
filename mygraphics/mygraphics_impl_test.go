@@ -5,13 +5,13 @@ import (
 	"testing"
 )
 
-func Test_Mock_Single_ReadFile(t *testing.T) {
+func Test_IM6_Single_ReadFile(t *testing.T) {
 
-	log.Println("@@@ Test_Mock_Single_ReadFile")
+	log.Println("@@@ Test_IM6_Single_ReadFile")
 
 	var ih ImageHandler
 
-	ih = NewImageHandlerMock()
+	ih = NewImageMagick6Handler()
 
 	ih.ReadFile("test01.jpg")
 

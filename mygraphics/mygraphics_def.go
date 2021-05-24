@@ -13,6 +13,6 @@ type Image struct {
 // ImageHandler used for different implementations
 type ImageHandler interface {
 	ReadFile(path string) (err error)
-	//GetInfo() (img Image)
-	//SaveFileResized() (err error)
+	GetInfo() (img Image)
+	SaveFileResized() (err error)
 }

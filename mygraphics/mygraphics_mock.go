@@ -7,6 +7,7 @@ import (
 // MockImage to play
 type MockImage struct {
 	fabric string
+	image  Image
 }
 
 func init() {
@@ -22,6 +23,16 @@ func NewImageHandlerMock() *MockImage {
 // ReadFileFromPath ddd
 func (mi *MockImage) ReadFile(path string) (err error) {
 	log.Println("@@@ NewImageHandlerMock ReadFileFromPath", path)
+	return nil
+}
+
+func (mi *MockImage) GetInfo() (img Image) {
+	log.Println("@@@ NewImageHandlerMock GetInfo")
+	return mi.image
+}
+
+func (mi *MockImage) SaveFileResized() (err error) {
+	log.Println("@@@ NewImageHandlerMock SaveFileResized")
 	return nil
 }
 
