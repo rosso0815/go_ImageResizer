@@ -13,9 +13,9 @@ func Test_IM6_Single_ReadFile(t *testing.T) {
 
 	ih = NewImageMagick6Handler()
 
-	ih.ReadFile("test01.jpg")
+	ih.ReadFile("test01.HEIC")
 
-	ih.GetInfo()
+	log.Printf("model => %s", ih.GetInfo().model)
 
 	ih.SaveFileResized()
 }

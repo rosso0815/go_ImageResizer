@@ -1,6 +1,10 @@
-#------------------------------------------------------------------------------
+# GO IMAGE RESIZER
 
-we use imagemagick@6
+## requirements
+
+we use imagemagick7 because of HEIC see https://eplt.medium.com/5-minutes-to-install-imagemagick-with-heic-support-on-ubuntu-18-04-digitalocean-fe2d09dcef1
+
+## 
 
 export IM_PATH="/usr/local/opt/imagemagick@6"
 export PATH="${IM_PATH}/bin:$PATH"
@@ -14,6 +18,9 @@ GODEBUG=gocacheverify=1 go get -u gopkg.in/gographics/imagick.v2/imagick
 GOFLAGS="-count=1"  go test -race ./mygraphics/
 
 #------------------------------------------------------------------------------
+
+need IM7 for HEIC
+
 
 go test -run TestReadDirectory
 
