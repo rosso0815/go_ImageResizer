@@ -1,11 +1,11 @@
 {
     "workbench.startupEditor": "newUntitledFile",
     "editor.fontSize": 16,
-    "editor.fontFamily": "Menlo",
+    "editor.fontFamily": "Source Code Pro Medium",
     "editor.fontLigatures": null,
     "explorer.confirmDelete": false,
     "terminal.integrated.automationShell.linux": "",
-    "terminal.integrated.fontFamily": "Monaco",
+    "terminal.integrated.fontFamily": "Source Code Pro Medium",
     "terminal.integrated.fontSize": 16,
     "terminal.integrated.lineHeight": 1,
     "go.formatTool": "goimports",
