@@ -1,3 +1,6 @@
+
+# https://kodfabrik.com/journal/a-good-makefile-for-go
+
 include .env
 
 PROJECTNAME=$(shell basename "$(PWD)")
@@ -56,6 +59,7 @@ exec:
 
 ## clean: Clean build files. Runs `go clean` internally.
 clean:
+	@echo @@@ clean
 	@(MAKEFILE) go-clean
 
 go-compile: go-clean go-get go-build
